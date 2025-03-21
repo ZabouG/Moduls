@@ -12,6 +12,9 @@ services:
     command: php -S 0.0.0.0:8080 -t /var/www/html
     depends_on:
       - db
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.10
 
   db:
     image: mysql:8.0
@@ -26,6 +29,13 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.11
 
 volumes:
   db_data:
+
+networks:
+  my_custom_network:
+    external: true
