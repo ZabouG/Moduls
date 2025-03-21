@@ -10,9 +10,9 @@
     test DB
 
     <?php
-    $servername = "localhost:3306";
-    $username = "user";
-    $password = "userpassword";
+    $servername = "172.20.0.2:3306";
+    $username = "root";
+    $password = "rootpassword";
     $dbname = "moduls";
     
     try {
