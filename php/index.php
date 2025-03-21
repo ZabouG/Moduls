@@ -10,7 +10,7 @@
     test DB
 
     <?php
-    $servername = "172.20.0.2:3306";
+    $servername = "172.18.0.11:3306";
     $username = "root";
     $password = "rootpassword";
     $dbname = "moduls";
