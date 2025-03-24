@@ -7,23 +7,8 @@
     <title>Moduls</title>
 </head>
 <body>
-    test DB
-
     <?php
-    $servername = "172.18.0.11:3306";
-    $username = "root";
-    $password = "rootpassword";
-    $dbname = "moduls";
-    
-    try {
-        // Create connection
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Connected successfully";
-    } catch (PDOException $e) {
-        die("Connection failed: " . $e->getMessage());
-    }
-    
+    require("layout\identification\connection.php");
     ?>
 </body>
 </html>

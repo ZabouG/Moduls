@@ -1,0 +1,47 @@
+<div class="container mx-auto max-w-md p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-2xl font-bold text-center mb-6">Connexion</h1>
+    
+    <?php
+    $page = isset($_GET["page"]) ? $_GET["page"] : "";
+    
+    if ($page !== "inscription") {
+    ?>
+        <form action="" method="post" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium">Adresse email</label>
+                <input type="email" name="email" id="email" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium">Mot de passe</label>
+                <input type="password" name="password" id="password" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Se connecter</button>
+            </div>
+        </form>
+        <p class="text-center mt-4 text-sm">Pas encore de compte ? <a href="?page=inscription" class="text-blue-500 hover:underline">S'inscrire</a></p>
+    <?php
+    } else {
+    ?>
+        <form action="" method="post" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium">Adresse email</label>
+                <input type="email" name="email" id="email" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium">Mot de passe</label>
+                <input type="password" name="password" id="password" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="password2" class="block text-sm font-medium">Confirmer le mot de passe</label>
+                <input type="password" name="password2" id="password2" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600">S'inscrire</button>
+            </div>
+        </form>
+        <p class="text-center mt-4 text-sm">J'ai déjà un compte ? <a href="?page=connection" class="text-blue-500 hover:underline">Se connecter</a></p>
+    <?php
+    }
+    ?>
+</div>
