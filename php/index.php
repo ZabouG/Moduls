@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-    require("layout\identification\connection.php");
+    require("layout/identification/connection.php");
     ?>
 </body>
 </html>

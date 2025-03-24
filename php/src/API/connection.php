@@ -7,13 +7,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST;
 
         // Exemple : Afficher les données reçues
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        echo "<script>console.log(" . json_encode($_POST, JSON_PRETTY_PRINT) . ");</script>";
+
+        require_once("./src/sql.php");
+        identification($data);
+
     } else {
-        echo 'Aucune donnée POST reçue.';
+
+    echo "<script>console.log('Aucune donnée POST reçue.');</script>";
+
     }
 } else {
-    echo 'Cette page accepte uniquement les requêtes POST.';
+    echo "<script>console.log('Cette page accepte uniquement les requêtes POST.');</script>";
 }
 ?>
