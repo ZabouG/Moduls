@@ -4,6 +4,56 @@
 
 <form action="" method="post" class="space-y-4">
             <div>
+                <label for="Nom" class="block text-sm font-medium">Nom</label>
+                <input type="text" name="Nom" id="Nom" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="Prenom" class="block text-sm font-medium">Prenom</label>
+                <input type="text" name="Prenom" id="Prenom" class="w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="Identifiant" class="block text-sm font-medium">Identifiant</label>
+                <input type="text" name="Identifiant" id="Identifiant" class="w-full p-2 border border-gray-300 rounded-md" required>
+                <p id="pseudo-message" class="text-sm mt-1"></p>
+            </div>
+
+            <script>
+                function checkPseudo() {
+                    let pseudo = document.getElementById('Identifiant').value;
+                    let message = document.getElementById('pseudo-message');
+                
+                    if (pseudo.length < 3) {
+                        message.innerText = "L'identifiant doit avoir au moins 3 caractères.";
+                        message.style.color = "red";
+                        return;
+                    } else {
+                        message.innerText = "";
+
+                    }
+                
+                    fetch("check_identifiant.php", {
+                        method: "POST",
+                        body: new URLSearchParams({ Identifiant: pseudo }),
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.exists) {
+                            message.innerText = "❌ Identifiant déjà pris.";
+                            message.style.color = "red";
+                        } else {
+                            message.innerText = "✅ Identifiant disponible.";
+                            message.style.color = "green";
+
+                        }
+                    })
+                    .catch(error => console.error("Erreur :", error));
+                }
+                
+                // Écouteur d'événements pour appeler la fonction à chaque saisie
+                document.getElementById('Identifiant').addEventListener('input', checkPseudo);
+                </script>
+            <div>
                 <label for="email" class="block text-sm font-medium">Adresse email</label>
                 <input type="email" name="email" id="email" class="w-full p-2 border border-gray-300 rounded-md" required>
             </div>
@@ -14,10 +64,12 @@
             <div>
                 <label for="password2" class="block text-sm font-medium">Confirmer le mot de passe</label>
                 <input type="password" name="password2" id="password2" class="w-full p-2 border border-gray-300 rounded-md" required>
+                <div id="password-message-container"></div>
             </div>
+            <script src="layout/identification/formulaire/checkPassword.js"></script>
             <div>
                 <input type="hidden" name="ACTION" id="ACTION" value="inscription">
-                <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600" action="POST">S'inscrire</button>
+                <button type="submit" id="valide" disabled class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed" action="POST">S'inscrire</button>
             </div>
         </form>
         <p class="text-center mt-4 text-sm">J'ai déjà un compte ? <a href="?page=connection" class="text-blue-500 hover:underline">Se connecter</a></p>
