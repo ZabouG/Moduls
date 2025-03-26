@@ -6,8 +6,10 @@
     } else {
         require("formulaire/form_inscription.html");
     }
-
-    require("./src/API/connection.php");
-
+    $post = isset($_POST) ? $_POST: "";
+    if ($post) {
+        require_once("src/API/inscription.php");
+        inscription($post);
+    }
     ?>
 </div>

@@ -8,9 +8,7 @@
         // Create connection
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        ?>     <script> console.log("👌 Connection DB reussi")</script> <?php
     } catch (PDOException $e) {
-        ?>     <script> console.log(".🚨 Connection Raté")</script> <?php
         die("Connection failed: " . $e->getMessage());
     }
     

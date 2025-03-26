@@ -1,3 +1,9 @@
+<?php
+// Démarre la session si elle n'est pas déjà commencée
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,8 +14,15 @@
     <title>Moduls</title>
 </head>
 <body>
-    <?php
-    require("layout/identification/connection.php");
+<?php
+    // Vérifie si l'utilisateur est connecté
+    if (isset($_SESSION["user"])) {
+        // Si l'utilisateur est connecté, affiche son nom
+        echo "<h1>Bienvenue, ".$_SESSION["user"]."</h1>";
+    } else {
+        // Sinon, inclut le fichier de connexion
+        require("layout/identification/connection.php");
+    }
     ?>
 </body>
 </html>

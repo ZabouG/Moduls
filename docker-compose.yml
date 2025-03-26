@@ -29,9 +29,23 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql  # Charge le dump au démarrage
     networks:
       my_custom_network:
         ipv4_address: 172.18.0.11
+
+  backup:
+    image: mysql:8.0
+    container_name: mysql_backup
+    depends_on:
+      - db
+    volumes:
+      - ./backups:/backup  # Monte un dossier au lieu d'un fichier
+    entrypoint: ["sh", "-c", "while true; do mysqldump -hmysql_db -uuser -puserpassword moduls > /backup/dump.sql; sleep 360; done"]
+    networks:
+      my_custom_network:
+        ipv4_address: 172.18.0.12
+
 
 volumes:
   db_data:
