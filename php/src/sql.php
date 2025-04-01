@@ -1,7 +1,7 @@
 <?php
-    $servername = "172.18.0.11:3306";
-    $username = "root";
-    $password = "rootpassword";
+    $servername = "www.moduls.fr:3306";
+    $username = "admin";
+    $password = "CUc6yjxaH8DcwYcxAbhw";
     $dbname = "moduls";
     
     try {
