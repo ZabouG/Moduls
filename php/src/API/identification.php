@@ -10,7 +10,7 @@ function inscription($post){
     }
 
     // Vérification des champs nécessaires dans $post
-    if (!isset($post["Nom"], $post["Prenom"], $post["email"], $post["password"], $post["Identifiant"])) {
+    if (!isset($post["Nom"], $post["Prenom"], $post["email"], $post["password"], $post["identifiant"])) {
         echo "<script>console.log('🚨 Champs manquants !');</script>";
         return false; // Retourne false si un des champs requis est manquant
     }
@@ -19,13 +19,13 @@ function inscription($post){
     // Vous pouvez adapter cette vérification en fonction de la structure de votre base de données
     $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE identifiant = :identifiant OR email = :email");
     $stmt->execute([
-        'identifiant' => $post['Identifiant'],
+        'identifiant' => $post['identifiant'],
         'email' => $post['email']
     ]);
     $exists = $stmt->fetchColumn();
     
     if ($exists > 0) {
-        echo "<script>console.log('🚨 Identifiant ou email déjà pris !');</script>";
+        echo "<script>console.log('🚨 identifiant ou email déjà pris !');</script>";
         return false; // Retourne false si l'identifiant ou l'email existe déjà
     }
 
@@ -39,7 +39,7 @@ function inscription($post){
             "password" => password_hash($post["password"], PASSWORD_DEFAULT),
             "nom" => $post["Nom"],
             "prenom" => $post["Prenom"],
-            "identifiant" => $post["Identifiant"]
+            "identifiant" => $post["identifiant"]
         ]);
         
         // Si l'inscription réussit

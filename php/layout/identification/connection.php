@@ -8,7 +8,8 @@
     }
     $post = isset($_POST) ? $_POST: "";
     if ($post) {
-        require_once("src/API/inscription.php");
+        require_once("src/API/identification.php");
+        echo "<script>console.log('🔑 POST: ".json_encode($post)."');</script>";
         inscription($post);
     }
     ?>
