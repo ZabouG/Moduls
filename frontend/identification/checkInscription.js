@@ -1,5 +1,11 @@
 console.log('checkInscription.js');
 
+// Ajout des événements pour la validation en temps réel
+document.getElementById('password').addEventListener('input', checkPassword);
+document.getElementById('password2').addEventListener('input', checkPassword);
+        
+document.getElementById('identifiant').addEventListener('input', checkPseudo); 
+
 // Fonction pour vérifier les mots de passe
 function checkPassword() {
     console.log('checkPassword()');
@@ -78,9 +84,6 @@ function checkPassword() {
     }
 }
 
-// Ajout des événements pour la validation en temps réel
-document.getElementById('password').addEventListener('input', checkPassword);
-document.getElementById('password2').addEventListener('input', checkPassword);
 
 // Fonction pour vérifier si l'identifiant est déjà pris
 let timeout = null;
@@ -88,9 +91,9 @@ let timeout = null;
 function checkPseudo() {
     console.log('checkPseudo()');
 
-    let pseudo = document.getElementById('Identifiant').value;
+    let pseudo = document.getElementById('identifiant').value;
     let message = document.getElementById('pseudo-message');
-    let identifiantInput = document.getElementById('Identifiant');
+    let identifiantInput = document.getElementById('identifiant');
 
     // Annule la requête précédente si l'utilisateur continue d'écrire
     clearTimeout(timeout);
@@ -107,19 +110,19 @@ function checkPseudo() {
 
     // Délai avant l'envoi de la requête (500ms après la dernière saisie)
     timeout = setTimeout(() => {
-        fetch("src/API/check_identifiant.php", {
+        fetch("http://localhost:8181/identification/check_identifiant.php", {
             method: "POST",
-            body: new URLSearchParams({ Identifiant: pseudo }),
+            body: new URLSearchParams({ identifiant: pseudo }),
             headers: { "Content-Type": "application/x-www-form-urlencoded" }
         })
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
-                message.innerText = "❌ Identifiant déjà pris.";
+                message.innerText = "❌ identifiant déjà pris.";
                 message.style.color = "red";
                 identifiantInput.style.borderColor = 'red';
             } else {
-                message.innerText = "✅ Identifiant disponible.";
+                message.innerText = "✅ identifiant disponible.";
                 message.style.color = "green";
                 identifiantInput.style.borderColor = 'green';
             }
@@ -128,7 +131,6 @@ function checkPseudo() {
     }, 500); // Attendre 500ms après la dernière frappe
 }
 
-// Écouteur d'événements pour la saisie de l'identifiant
-document.getElementById('Identifiant').addEventListener('input', checkPseudo);
+
 
 
