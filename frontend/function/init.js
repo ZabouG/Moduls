@@ -23,10 +23,8 @@ async function verifyToken(token, userId) {
 
             if (data.success) {
                 console.log('✅ Token is valid:', data.message);
-                document.body.innerHTML += `<p style="color:green;">${data.message}</p>`;
             } else {
                 console.error('❌ Invalid token:', data.message);
-                document.body.innerHTML += `<p style="color:red;">${data.message}</p>`;
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('user');
                 window.location = '/identification/form_connection.html';
@@ -34,14 +32,12 @@ async function verifyToken(token, userId) {
 
         } catch (error) {
             console.error('💥 Error verifying token:', error);
-            document.body.innerHTML += `<p style="color:red;">Erreur de vérification.</p>`;
             localStorage.removeItem('authToken');
             localStorage.removeItem('user');
             window.location = '/identification/form_connection.html';
         }
     } else {
         console.warn('⚠️ Aucun token trouvé');
-        document.body.innerHTML += `<p style="color:orange;">Aucun token trouvé dans localStorage.</p>`;
         window.location = '/identification/form_connection.html';
     }
 }

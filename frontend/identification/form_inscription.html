@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@
     <h1 class="text-2xl font-bold text-center mb-6">Inscription</h1>
     
 
-<form action="" method="post" class="space-y-4">
+<form action="" method="" class="space-y-4">
             <div>
                 <label for="Nom" class="block text-sm font-medium">Nom</label>
                 <input type="text" name="Nom" id="Nom" class="w-full p-2 border border-gray-300 rounded-md" required>
@@ -43,11 +44,14 @@
             </div>
             <div>
                 <input type="hidden" name="ACTION" id="ACTION" value="inscription">
-                <button type="submit" id="valide" disabled class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed" action="POST">S'inscrire</button>
+                <button type="submit" id="valide" disabled class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    S'inscrire
+                </button>
             </div>
         </form>
         <p class="text-center mt-4 text-sm">J'ai déjà un compte ? <a href="form_connection.html" class="text-blue-500 hover:underline">Se connecter</a></p>
 
-        <script src="checkInscription.js"> </script>
 </body>
 </html>
+<script src="checkInscription.js"> </script>
+
