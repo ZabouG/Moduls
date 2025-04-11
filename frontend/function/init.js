@@ -1,22 +1,17 @@
-// Définir les valeurs pour test
-localStorage.setItem('authToken', 'test'); 
-localStorage.setItem('user', 'test'); 
+const token = localStorage.getItem('token') || '';
 
-const token = localStorage.getItem('authToken') || '';
-const userId = localStorage.getItem('user') || '';
 
-verifyToken(token, userId);
+verifyToken(token);
 
-async function verifyToken(token, userId) {
-    if (token && userId) {
+async function verifyToken(token) {
+    if (token) {
         try {
-            const response = await fetch('http://localhost:8181/verify-token.php', {
+            const response = await fetch('http://localhost:8181/verifToken.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({ idUser: userId })
             });
 
             const data = await response.json();
@@ -25,14 +20,14 @@ async function verifyToken(token, userId) {
                 console.log('✅ Token is valid:', data.message);
             } else {
                 console.error('❌ Invalid token:', data.message);
-                localStorage.removeItem('authToken');
+                localStorage.removeItem('token');
                 localStorage.removeItem('user');
                 window.location = '/identification/form_connection.html';
             }
 
         } catch (error) {
             console.error('💥 Error verifying token:', error);
-            localStorage.removeItem('authToken');
+            localStorage.removeItem('token'); // ✅ correspond au setItem fait au login
             localStorage.removeItem('user');
             window.location = '/identification/form_connection.html';
         }

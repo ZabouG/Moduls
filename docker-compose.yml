@@ -15,18 +15,17 @@ services:
         ipv4_address: 172.18.0.10
 
   backend:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: php_backend
     volumes:
       - ./backend:/var/www/html
     ports:
-      - "8181:8181"  # Correction ici : même port à l'intérieur et à l’extérieur
-    working_dir: /var/www/html
-    command: php -S 0.0.0.0:8181 -t /var/www/html  # Démarre bien sur le port 8181
+      - "8181:80"
     networks:
       my_custom_network:
         ipv4_address: 172.18.0.11
-
 
 networks:
   my_custom_network:
