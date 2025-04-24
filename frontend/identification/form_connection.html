@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="../style/output.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
 </head>
 <body>   
     <div class="container mx-auto max-w-md p-6 bg-white shadow-md rounded-lg">
@@ -22,7 +23,7 @@
         <div>
             <input type="hidden" name="ACTION" id="ACTION" value="connection">          
             <button id="submitBtn" type="submit"
-            class="relative w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed">
+            class="relative w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors cursor-pointer overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed">
             <span id="btnText">Se connecter</span>
             <span id="btnLoader" class="absolute inset-0 flex items-center justify-center hidden">
                 <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"

@@ -12,7 +12,7 @@ services:
     command: php -S 0.0.0.0:8282 -t /var/www/html
     networks:
       my_custom_network:
-        ipv4_address: 172.18.0.10
+        ipv4_address: 172.18.0.10 
 
   backend:
     build:

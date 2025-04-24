@@ -15,7 +15,7 @@ require_once 'DB/Request.php'; // Ce fichier doit contenir $userConn
 
 // 🔐 Fonction de vérification du token en BDD
 function verifyToken($conn, $token, $idUser): bool {
-    $reponse = executeSelect($conn, "SELECT token FROM users WHERE token = :token AND idUser = :idUser", [
+    $reponse = $conn->execute("SELECT token FROM users WHERE token = :token AND idUser = :idUser", [
         ':token' => $token,
         ':idUser' => $idUser
     ]);
