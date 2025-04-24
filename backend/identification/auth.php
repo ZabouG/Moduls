@@ -1,4 +1,15 @@
 <?php
+
+/* 
+auth.php : Verification du token d'authentification
+Ce fichier doit être inclus dans toutes les routes nécessitant une authentification
+Il vérifie la présence du token dans l'en-tête Authorization de la requête
+Si le token est valide, il le déchiffre et vérifie sa validité dans la base de données
+Si le token est valide, il récupère les informations de l'utilisateur et les rend accessibles dans la variable $connectedUser
+Si le token est invalide ou expiré, il renvoie une réponse 401 Unauthorized
+et un message d'erreur au format JSON 
+*/
+
 header("Content-Type: application/json");
 
 require('../TokenService.php');

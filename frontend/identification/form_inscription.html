@@ -28,6 +28,8 @@
                 <label for="identifiant" class="block text-sm font-medium">Identifiant</label>
                 <input type="text" name="identifiant" id="identifiant" class="w-full p-2 border border-gray-300 rounded-md" required>
                 <p id="pseudo-message" class="text-sm mt-1"></p>
+                <span id="identifiant-loading" class="text-sm text-gray-400 hidden">⏳ Vérification...</span>
+
             </div>
             <div>
                 <label for="email" class="block text-sm font-medium">Adresse email</label>
@@ -48,6 +50,8 @@
                 <button type="submit" id="valide" disabled class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
                     S'inscrire
                 </button>
+                <div id="global-message"></div>
+
             </div>
         </form>
         <p class="text-center mt-4 text-sm">J'ai déjà un compte ? <a href="form_connection.html" class="text-blue-500 hover:underline">Se connecter</a></p>
