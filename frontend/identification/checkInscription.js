@@ -159,3 +159,51 @@ document.addEventListener('DOMContentLoaded', () => {
         checkPseudo();
     }, 100);
 });
+
+document.getElementById('registerForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const form = event.target;
+    const submitBtn = document.getElementById('valide');
+    const messageText = document.getElementById('global-message');
+
+    submitBtn.disabled = true;
+    messageText.textContent = '';
+    messageText.className = '';
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch('http://localhost:8181/identification/create-account.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success || !result.user || !result.user.token) {
+            throw new Error(result.message || 'Erreur lors de la création du compte.');
+        }
+
+        messageText.textContent = '✅ Compte créé avec succès ! Redirection...';
+        messageText.className = 'text-green-600 font-semibold text-center mt-4';
+
+        localStorage.setItem('token', result.user.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
+
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Erreur :', error);
+        messageText.textContent = '❌ ' + error.message;
+        messageText.className = 'text-red-600 font-semibold text-center mt-4';
+    } finally {
+        submitBtn.disabled = false;
+    }
+});
