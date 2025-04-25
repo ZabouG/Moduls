@@ -6,7 +6,7 @@ let isPseudoValid = false;
 // Ajout des événements pour la validation en temps réel
 document.getElementById('password').addEventListener('input', checkPassword);
 document.getElementById('password2').addEventListener('input', checkPassword);
-document.getElementById('identifiant').addEventListener('input', checkPseudo);
+document.getElementById('identifiant').addEventListener('input', () => debounce(checkPseudo, 500));
 
 function updateValidationButton() {
     const valideButton = document.getElementById('valide');
@@ -18,12 +18,10 @@ function updateValidationButton() {
 }
 
 function checkPassword() {
-    console.log('checkPassword()');
-
-    let password = document.getElementById('password').value;
-    let password2 = document.getElementById('password2').value;
-    let messageContainer = document.getElementById('password-message-container');
-    let messageContainer2 = document.getElementById('password-message-container2');
+    const password = document.getElementById('password').value;
+    const password2 = document.getElementById('password2').value;
+    const messageContainer = document.getElementById('password-message-container');
+    const messageContainer2 = document.getElementById('password-message-container2');
 
     messageContainer.innerHTML = '';
     messageContainer2.innerHTML = '';
@@ -44,7 +42,7 @@ function checkPassword() {
         if (!/[0-9]/.test(password)) {
             errors2.push("Le mot de passe doit contenir au moins un chiffre.");
         }
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) {
             errors2.push("Le mot de passe doit contenir au moins un caractère spécial.");
         }
 
@@ -57,7 +55,7 @@ function checkPassword() {
             document.getElementById('password2').style.borderColor = 'green';
             isPasswordValid = true;
 
-            let successMessage = document.createElement('p');
+            const successMessage = document.createElement('p');
             successMessage.className = 'text-sm mt-1';
             successMessage.style.color = 'green';
             successMessage.innerText = "Mot de passe valide.";
@@ -65,7 +63,7 @@ function checkPassword() {
         }
 
         errors.forEach(error => {
-            let p = document.createElement('p');
+            const p = document.createElement('p');
             p.className = 'text-sm mt-1';
             p.style.color = 'red';
             p.innerText = error;
@@ -73,12 +71,13 @@ function checkPassword() {
         });
 
         errors2.forEach(error => {
-            let p = document.createElement('p');
+            const p = document.createElement('p');
             p.className = 'text-sm mt-1';
             p.style.color = 'red';
             p.innerText = error;
             messageContainer2.appendChild(p);
         });
+
     } else {
         document.getElementById('password').style.borderColor = '';
         document.getElementById('password2').style.borderColor = '';
@@ -88,17 +87,11 @@ function checkPassword() {
     updateValidationButton();
 }
 
-// Fonction pour vérifier si l'identifiant est déjà pris
-let timeout = null;
-
 function checkPseudo() {
-    console.log('checkPseudo()');
-
-    let pseudo = document.getElementById('identifiant').value;
-    let message = document.getElementById('pseudo-message');
-    let identifiantInput = document.getElementById('identifiant');
-
-    clearTimeout(timeout);
+    const pseudo = document.getElementById('identifiant').value;
+    const message = document.getElementById('pseudo-message');
+    const identifiantInput = document.getElementById('identifiant');
+    const loading = document.getElementById('identifiant-loading');
 
     if (pseudo.length < 3) {
         message.innerText = "L'identifiant doit avoir au moins 3 caractères.";
@@ -109,12 +102,15 @@ function checkPseudo() {
         return;
     }
 
-    timeout = setTimeout(() => {
-        fetch("http://localhost:8181/identification/check_identifiant.php", {
-            method: "POST", 
-            body: new URLSearchParams({ identifiant: pseudo }),
-            headers: { "Content-Type": "application/x-www-form-urlencoded" }
-        })
+    // 🔒 Bloque l'édition du champ pendant la vérification
+    identifiantInput.setAttribute('readonly', 'readonly');
+    loading.classList.remove('hidden');
+
+    fetch("http://localhost:8181/identification/check_identifiant.php", {
+        method: "POST",
+        body: new URLSearchParams({ identifiant: pseudo }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    })
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
@@ -128,20 +124,86 @@ function checkPseudo() {
                 identifiantInput.style.borderColor = 'green';
                 isPseudoValid = true;
             }
-            updateValidationButton();
         })
         .catch(error => {
             console.error("Erreur :", error);
+            showGlobalMessage("Erreur réseau lors de la vérification du pseudo", 'red');
             isPseudoValid = false;
+        })
+        .finally(() => {
+            // ✅ Réactive le champ et met à jour l'état
+            loading.classList.add('hidden');
+            identifiantInput.removeAttribute('readonly');
             updateValidationButton();
         });
-    }, 500);
 }
 
-// 👇 Appel des fonctions au chargement de la page
+function showGlobalMessage(message, color = 'green') {
+    const globalMessage = document.getElementById('global-message');
+    globalMessage.textContent = message;
+    globalMessage.className = `text-center text-sm font-semibold mt-4 text-${color}-600`;
+    setTimeout(() => {
+        globalMessage.textContent = '';
+    }, 5000);
+}
+
+let debounceTimeout = null;
+function debounce(fn, delay = 500) {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(fn, delay);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         checkPassword();
         checkPseudo();
     }, 100);
+});
+
+document.getElementById('registerForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const form = event.target;
+    const submitBtn = document.getElementById('valide');
+    const messageText = document.getElementById('global-message');
+
+    submitBtn.disabled = true;
+    messageText.textContent = '';
+    messageText.className = '';
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch('http://localhost:8181/identification/create-account.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success || !result.user || !result.user.token) {
+            throw new Error(result.message || 'Erreur lors de la création du compte.');
+        }
+
+        messageText.textContent = '✅ Compte créé avec succès ! Redirection...';
+        messageText.className = 'text-green-600 font-semibold text-center mt-4';
+
+        localStorage.setItem('token', result.user.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
+
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Erreur :', error);
+        messageText.textContent = '❌ ' + error.message;
+        messageText.className = 'text-red-600 font-semibold text-center mt-4';
+    } finally {
+        submitBtn.disabled = false;
+    }
 });

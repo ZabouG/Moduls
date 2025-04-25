@@ -29,5 +29,27 @@ class Database {
     public function getConnection() {
         return $this->pdo;
     }
+    public function query($sql, $params = []) {
+        try {
+            $stmt = $this->pdo->prepare($sql); // appel correct à prepare
+            $stmt->execute($params);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo "Erreur lors de l'exécution de la requête : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function execute($sql, $params = []) {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            return $stmt->rowCount(); // retourne le nombre de lignes affectées
+        } catch (PDOException $e) {
+            echo "Erreur lors de l'exécution : " . $e->getMessage();
+            return false;
+        }
+    }    
+    
 }
 ?>

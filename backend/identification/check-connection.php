@@ -11,39 +11,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 
+$input = json_decode(file_get_contents("php://input"), true);
+require_once '../DB/Request.php';
+require_once '../tokenService.php'; // à adapter selon ton arborescence
 
-require_once '../DB/Request.php'; // Doit définir $adminConn
-
-if (!isset($_POST['identifiant']) || empty(trim($_POST['identifiant'])) || !isset($_POST['password'])) {
-    http_response_code(400);
-    echo json_encode([
-        "success" => false,
-        "message" => "Identifiant ou mot de passe manquant."
-    ]);
+if (!isset($input['identifiant']) || empty(trim($input['identifiant']))) {
+    echo json_encode(["success" => false, "message" => "Aucun identifiant fourni."]);
     exit();
 }
 
-$identifiant = trim($_POST['identifiant']);
-$password = $_POST['password'];
+if (!isset($input['password']) || empty(trim($input['password']))) {
+    echo json_encode(["success" => false, "message" => "Aucun mot de passe fourni."]);
+    exit();
+}
+
+$identifiant = trim($input['identifiant']);
+$password = $input['password'];
 
 try {
-    // On récupère l'utilisateur avec son mot de passe haché
-    $stmt = $adminConn->prepare("SELECT * FROM users WHERE identifiant = ? OR email = ?");
+    $stmt = $adminConn->prepare("SELECT id, identifiant, email, password FROM users WHERE (identifiant = ? OR email = ?)");
     $stmt->execute([$identifiant, $identifiant]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
+
+        // Génération du token brut
+        $expirationTime = time() + 3600;
+        $tokenRaw = $user['identifiant'] . ':' . $user['email'] . ':' . $expirationTime;
+
+        // Token pour le client (chiffré)
+        $tokenEncrypted = TokenService::encrypt($tokenRaw);
+
+        // Hash pour stockage en base
+        $tokenHashed = hash('sha256', $tokenRaw);
+
+        // Suppression de l'ancien token
+        $stmt = $adminConn->prepare("DELETE FROM tokens WHERE id_user = ?");
+        $stmt->execute([$user['id']]);
+
+        // Insertion du nouveau token
+        $stmt = $adminConn->prepare("INSERT INTO tokens (id_user, token, created_at, expired_at) VALUES (?, ?, ?, ?)");
+        $stmt->execute([
+            $user['id'],
+            $tokenHashed,
+            date('Y-m-d H:i:s'),
+            date('Y-m-d H:i:s', $expirationTime)
+        ]);
+
         echo json_encode([
             "success" => true,
+            "message" => "Connexion réussie.",
             "user" => [
-                "id" => $user['id'],
                 "identifiant" => $user['identifiant'],
-                "email" => $user['email']
-                // N’inclus PAS le mot de passe dans la réponse
-            ],
-            "message" => "Connexion réussie."
+                "email" => $user['email'],
+                "token" => $tokenEncrypted // envoyé au client uniquement
+            ]
         ]);
     } else {
+        http_response_code(401);
         echo json_encode([
             "success" => false,
             "message" => "Identifiant ou mot de passe incorrect."
