@@ -23,4 +23,27 @@ Quand boton "Supprimer" préssé suppréssion du moduls de la base données avec
 
 */
 
+class Moduls {
+    constructor(title, description, content, image) {
+        this.title          = title;
+        this.description    = description;
+        this.content        = content;
+        this.image          = image;
+    }
 
+    getModulsData() {
+        const title             = document.getElementById('title').value;
+        const description       = document.getElementById('description').value;
+        const content           = document.getElementById('content').value;
+        const image             = document.getElementById('image').value;
+        console.log(title, description, content, image);
+        return { title, description, content, image };
+
+        }
+
+    addModuls() {
+        const moduls = new Moduls(this.title, this.description, this.content, this.image);
+        moduls.addModuls();
+    }
+
+}
