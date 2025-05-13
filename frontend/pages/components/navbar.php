@@ -9,7 +9,7 @@
             <a id="loginButton" href="../identification/form_connection.html" class="flex-grow px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
             <button class="w-full h-full bg-transparent border-none focus:outline-none">Se connecter</button></a>    
             
-            <a href="../identification/form_inscription.html" class="">
+            <a href="../identification/form_inscription.html" class="flex-grow px-4 py-2 bg-green-600 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
             <button id="registerButton" class=" ">S'inscrire</button></a>
 
         </div>
