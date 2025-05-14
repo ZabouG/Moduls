@@ -43,6 +43,6 @@ try {
     http_response_code(500);
     echo json_encode([
         "success" => false,
-        "message" => "Erreur base de données : " . $e->getMessage()
-    ]);
+        "message" => "Erreur:DB base de données : " . $e->getMessage()
+    ]); 
 }
