@@ -8,6 +8,9 @@ document.getElementById('password').addEventListener('input', checkPassword);
 document.getElementById('password2').addEventListener('input', checkPassword);
 document.getElementById('identifiant').addEventListener('input', () => debounce(checkPseudo, 500));
 
+document.querySelector('form').addEventListener('submit', handleInscription);
+
+
 function updateValidationButton() {
     const valideButton = document.getElementById('valide');
     if (isPasswordValid && isPseudoValid) {
@@ -55,11 +58,6 @@ function checkPassword() {
             document.getElementById('password2').style.borderColor = 'green';
             isPasswordValid = true;
 
-            const successMessage = document.createElement('p');
-            successMessage.className = 'text-sm mt-1';
-            successMessage.style.color = 'green';
-            successMessage.innerText = "Mot de passe valide.";
-            messageContainer.appendChild(successMessage);
         }
 
         errors.forEach(error => {
@@ -102,7 +100,9 @@ function checkPseudo() {
         return;
     }
 
+
     // 🔒 Bloque l'édition du champ pendant la vérification
+
     identifiantInput.setAttribute('readonly', 'readonly');
     loading.classList.remove('hidden');
 
@@ -131,12 +131,70 @@ function checkPseudo() {
             isPseudoValid = false;
         })
         .finally(() => {
+
             // ✅ Réactive le champ et met à jour l'état
+
             loading.classList.add('hidden');
             identifiantInput.removeAttribute('readonly');
             updateValidationButton();
         });
 }
+
+
+function handleInscription(event) {
+    event.preventDefault();
+
+    const button = document.getElementById('valide');
+    const messageText = document.getElementById('global-message');
+
+    button.disabled = true;
+
+    const formData = new FormData(document.querySelector('form'));
+    const data = Object.fromEntries(formData.entries());
+
+    console.log('Payload envoyé :', data);
+
+    fetch('http://localhost:8181/identification/create-account.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Réponse serveur :', result);
+
+            if (!result.success) {
+                throw new Error(result.message);
+            }
+
+            // ✅ Inscription réussie
+            messageText.textContent = "Inscription réussie !";
+            messageText.classList.remove('text-red-600');
+            messageText.classList.add('text-green-600');
+
+            // Stockage du token
+            localStorage.setItem('token', result.user.token);
+            localStorage.setItem('user', JSON.stringify(result.user));
+
+            // Redirection ou autre action
+            setTimeout(() => {
+                window.location.href = "../index.html";
+            }, 2000);
+
+        })
+        .catch(error => {
+            console.error('Erreur :', error);
+            messageText.textContent = 'Erreur lors de l\'inscription : ' + error.message;
+            messageText.classList.remove('text-green-600');
+            messageText.classList.add('text-red-600');
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
+}
+
 
 function showGlobalMessage(message, color = 'green') {
     const globalMessage = document.getElementById('global-message');
