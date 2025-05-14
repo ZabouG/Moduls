@@ -101,7 +101,9 @@ function checkPseudo() {
     }
 
 
+
     // 🔒 Bloque l'édition du champ pendant la vérification
+
 
     identifiantInput.setAttribute('readonly', 'readonly');
     loading.classList.remove('hidden');
@@ -132,7 +134,9 @@ function checkPseudo() {
         })
         .finally(() => {
 
+
             // ✅ Réactive le champ et met à jour l'état
+
 
             loading.classList.add('hidden');
             identifiantInput.removeAttribute('readonly');
