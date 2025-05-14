@@ -56,7 +56,7 @@ try {
     $tokenHashed = hash('sha256', $tokenRaw);
 
     // Enregistre le token
-    $stmt = $adminConn->prepare("INSERT INTO tokens (user_id, token, created_at, expired_at) VALUES (?, ?, ?, ?)");
+    $stmt = $adminConn->prepare("INSERT INTO tokens (id_user, token, created_at, expired_at) VALUES (?, ?, ?, ?)");
     $stmt->execute([$userId, $tokenHashed, date('Y-m-d H:i:s'), date('Y-m-d H:i:s', $expirationTime)]);
 
     echo json_encode([
