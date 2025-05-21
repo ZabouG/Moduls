@@ -13,7 +13,7 @@ document.querySelector('form').addEventListener('submit', handleInscription);
 
 function updateValidationButton() {
     const valideButton = document.getElementById('valide');
-    if (isPasswordValid && isPseudoValid) {
+    if (isPasswordValid && isPseudoValidLength && isPseudoValid) {
         valideButton.removeAttribute('disabled');
     } else {
         valideButton.setAttribute('disabled', 'disabled');
@@ -95,9 +95,14 @@ function checkPseudo() {
         message.innerText = "L'identifiant doit avoir au moins 3 caractères.";
         message.style.color = "red";
         identifiantInput.style.borderColor = 'red';
-        isPseudoValid = false;
+        isPseudoValidLength = false;
         updateValidationButton();
         return;
+    } else {
+        message.innerText = "";
+        identifiantInput.style.borderColor = '';
+        isPseudoValidLength = true;
+        updateValidationButton();
     }
 
 
@@ -144,7 +149,7 @@ function checkPseudo() {
         });
 }
 
-
+//fix
 function handleInscription(event) {
     event.preventDefault();
 
