@@ -1,10 +1,11 @@
 <?php 
-include('./components/navbar.php');
+include('page/components/navbar.php');
 ?>
 
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="function/init.js"></script>
 </head>
 <body>
     <div class="flex">
