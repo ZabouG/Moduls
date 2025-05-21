@@ -49,7 +49,7 @@ document.getElementById('connectionForm').addEventListener('submit', async (even
         localStorage.setItem('token', result.user.token);
         localStorage.setItem('user', JSON.stringify(result.user));
 
-        window.location.href = "../index.html";
+        window.location.href = "/";
 
     } catch (error) {
         console.error('Erreur:', error);

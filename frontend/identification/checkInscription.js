@@ -189,7 +189,7 @@ function handleInscription(event) {
 
             // Redirection ou autre action
             setTimeout(() => {
-                window.location.href = "../index.html";
+                window.location.href = "/";
             }, 2000);
 
         })
@@ -263,7 +263,7 @@ document.getElementById('registerForm').addEventListener('submit', async (event)
         localStorage.setItem('user', JSON.stringify(result.user));
 
         setTimeout(() => {
-            window.location.href = '../index.html';
+            window.location.href = '/';
         }, 2000);
 
     } catch (error) {

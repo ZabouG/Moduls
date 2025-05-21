@@ -1,5 +1,5 @@
 <?php 
-include('page/components/navbar.php');
+include __DIR__ . '/pages/components/navbar.php';
 ?>
 
 <html>
@@ -9,7 +9,8 @@ include('page/components/navbar.php');
 </head>
 <body>
     <div class="flex">
-        <?php include('page/components/sidebar.php');?>
+        <?php include __DIR__ . '/pages/components/sidebar.php';
+    ?>
         
         <div class="flex-1 p-6">
             <!-- Your home page content goes here -->
