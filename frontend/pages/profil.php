@@ -1,5 +1,5 @@
 <?php 
-include "./components/navbar.php";
+include "page/components/navbar.php";
 ?>
 
 <html>
@@ -8,7 +8,7 @@ include "./components/navbar.php";
 </head>
 <body>
     <div class="flex">
-        <?php include "./components/sidebar.php";?>
+        <?php include "page/components/sidebar.php";?>
   
 
     <div class="flex-1 p-6">
